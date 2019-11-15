@@ -44,11 +44,12 @@ public class TestUniRX : MonoBehaviour
             .Where(_ => Input.GetMouseButtonDown(0))
             .Where(_ =>
             {
+                // can use if add to disposal
                 //return gameObject != null && gameObject.activeSelf;    //cannot use due to variable capture -> gameObject was destroy but trying to access it.
                 return _isEnable;
             });
 
-        clickStream.Buffer(clickStream.Throttle(TimeSpan.FromMilliseconds(250)))
+        var checkDoubleClicked = clickStream.Buffer(clickStream.Throttle(TimeSpan.FromMilliseconds(250)))
             .Where(clicks => clicks.Count == 2)
             .Subscribe(clicks =>
             {
@@ -57,7 +58,7 @@ public class TestUniRX : MonoBehaviour
                 go.GetComponent<MeshRenderer>().material.color = new Color(UnityEngine.Random.value, UnityEngine.Random.value, UnityEngine.Random.value);
             });
 
-        clickStream.Buffer(clickStream.Throttle(TimeSpan.FromMilliseconds(450)))
+        var checkTrippleClicked = clickStream.Buffer(clickStream.Throttle(TimeSpan.FromMilliseconds(450)))
            .Where(clicks => clicks.Count == 3)
            .Subscribe(clicks =>
            {
@@ -65,17 +66,10 @@ public class TestUniRX : MonoBehaviour
                var go = Instantiate(_sphere, new Vector3(0f, 4f, 0f), Quaternion.identity);
                go.GetComponent<MeshRenderer>().material.color = new Color(UnityEngine.Random.value, UnityEngine.Random.value, UnityEngine.Random.value);
            });
-    }
 
-    // Update is called once per frame
-    //void Update()
-    //{
-    //    //if (Input.GetMouseButtonDown(0))
-    //    //{
-    //    //    mouseCount++;
-    //    //    Debug.Log($"Mouse Clicked {mouseCount}");
-    //    //}
-    //}
+		_disposables.Add(checkDoubleClicked);
+        _disposables.Add(checkTrippleClicked);
+    }
 
     //private void OnDisable()
     //{

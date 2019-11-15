@@ -25,12 +25,14 @@ public class TestNetworking : MonoBehaviour
                     //select new { google, bing, unknown };
                     select new { google, bing };
 
-        query.Subscribe(x => OnNext(x.google, x.bing));
+        var cancel = query.Subscribe(x => OnNext(x.google, x.bing));
 
         //var cancel = query.Subscribe(x => OnNext(x.google, x.bing));
 
         // Call Dispose is cancel.
         //cancel.Dispose();
+
+        _disposables.Add(cancel);
     }
 
     [ContextMenu("StartNetworking")]
@@ -42,7 +44,9 @@ public class TestNetworking : MonoBehaviour
                         //select new { google, bing, unknown };
                     select new { google, bing };
 
-        query.Subscribe(x => OnNext(x.google, x.bing));
+        var cancel = query.Subscribe(x => OnNext(x.google, x.bing));
+
+        _disposables.Add(cancel);
     }
 
     private void OnNext(string x)
