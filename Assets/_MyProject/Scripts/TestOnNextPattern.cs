@@ -10,12 +10,12 @@ public class TestOnNextPattern : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        // use case
-        Application.LoadLevelAsync("testscene")
-            .AsObservable()
-            .Do(x => Debug.Log(x)) // output progress
-            .Last() // last sequence is load completed
-            .Subscribe();
+        //// use case
+        //Application.LoadLevelAsync("testscene")
+        //    .AsObservable()
+        //    .Do(x => Debug.Log(x)) // output progress
+        //    .Last() // last sequence is load completed
+        //    .Subscribe();
     }
 
 
