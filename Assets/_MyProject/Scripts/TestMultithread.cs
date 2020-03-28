@@ -6,6 +6,8 @@ using UnityEngine;
 
 public class TestMultithread : MonoBehaviour
 {
+    private CompositeDisposable _disposables = new CompositeDisposable();
+
     // Start is called before the first frame update
     void Start()
     {
@@ -31,7 +33,7 @@ public class TestMultithread : MonoBehaviour
         });
 
         // Join and await two other thread values
-        Observable.WhenAll(heavyMethod, heavyMethod2)
+        var threadObservable = Observable.WhenAll(heavyMethod, heavyMethod2)
             .ObserveOnMainThread() // return to main thread
             .Subscribe(xs =>
             {
@@ -40,5 +42,7 @@ public class TestMultithread : MonoBehaviour
                 //(GameObject.Find("myGuiText")).GetComponent<GUIText>.text = xs[0] + ":" + xs[1];
                 Debug.Log($"{xs[0]} : {xs[1]}");
             });
+
+        _disposables.Add(threadObservable);
     }
 }
